@@ -1,7 +1,26 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const FeedCard = ({ user }) => {
-  const { firstName, lastName, age, gender, about, skills } = user;
+  const { firstName, lastName, age, gender, about, skills, _id } = user;
+  const location = useLocation();
+  const handleIgnore = async () => {
+    const res = await axios.post(
+      "http://localhost:3000/connection/pass/" + _id,
+      {},
+      { withCredentials: true }
+    );
+    console.log("res:::", res);
+  };
+  const handleInterest = async () => {
+    const res = await axios.post(
+      "http://localhost:3000/connection/interested/" + _id,
+      {},
+      { withCredentials: true }
+    );
+    console.log("res:::", res);
+  };
 
   return (
     <div>
@@ -15,10 +34,16 @@ const FeedCard = ({ user }) => {
             {gender} {age}
           </p>
           <p>{skills.join(",")}</p>
-          <div>
-            <button className="btn btn-error mx-2 ">Ignore</button>
-            <button className="btn btn-success ">Interest</button>
-          </div>
+          {location.pathname === "/" && (
+            <div>
+              <button className="btn btn-error mx-2 " onClick={handleIgnore}>
+                Ignore
+              </button>
+              <button className="btn btn-success " onClick={handleInterest}>
+                Interest
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

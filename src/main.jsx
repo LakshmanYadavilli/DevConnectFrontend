@@ -4,11 +4,18 @@ import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
 import Store from "./utils/Store";
+import { SnackbarProvider } from "notistack";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={Store}>
-      <App />
-    </Provider>
+    <SnackbarProvider
+      maxSnack={3}
+      anchorOrigin={{ vertical: "center", horizontal: "bottom" }}
+      autoHideDuration={4000}
+    >
+      <Provider store={Store}>
+        <App />
+      </Provider>
+    </SnackbarProvider>
   </StrictMode>
 );

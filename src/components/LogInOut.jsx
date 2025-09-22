@@ -24,7 +24,7 @@ const LogInOut = () => {
       // userDispatch(setUser(data.data));
       navigate("/");
     } catch (error) {
-      console.log(error);
+      console.log(error, "lakshman");
     }
   };
   return (
