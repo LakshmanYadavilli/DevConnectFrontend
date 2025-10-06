@@ -4,8 +4,10 @@ import FeedCard from "./FeedCard";
 
 const Requests = () => {
   const [requests, setRequests] = useState([]);
+  const [isChange, setIsChange] = useState(false);
   useEffect(() => {
     const fetchRequests = async () => {
+      console.log("fetchRequest called:::");
       const res = await axios.get("http://localhost:3000/connection/requests", {
         withCredentials: true,
       });
@@ -13,7 +15,8 @@ const Requests = () => {
       setRequests(res.data.data);
     };
     fetchRequests();
-  }, []);
+    setIsChange(false);
+  }, [isChange]);
   console.log("request:::", requests);
   if (requests.length === 0) {
     return (
@@ -23,7 +26,11 @@ const Requests = () => {
   return (
     <div>
       {requests.map((connection) => (
-        <FeedCard user={connection} key={connection._id} />
+        <FeedCard
+          user={connection}
+          key={connection._id}
+          setIsChange={setIsChange}
+        />
       ))}
     </div>
   );

@@ -2,25 +2,58 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
-const FeedCard = ({ user }) => {
-  const { firstName, lastName, age, gender, about, skills, _id } = user;
+const FeedCard = ({ user, setIsChange }) => {
+  const { firstName, lastName, age, gender, about, skills, _id } =
+    user?.fromUserId || user;
   const location = useLocation();
-  const handleIgnore = async () => {
-    const res = await axios.post(
-      "http://localhost:3000/connection/pass/" + _id,
-      {},
-      { withCredentials: true }
-    );
-    console.log("res:::", res);
+  const isHomePage = location.pathname === "/" ? true : false;
+  const isConnectionPage = location.pathname === "/connections" ? true : false;
+  const handleIgnoreOrReject = async () => {
+    try {
+      if (isHomePage) {
+        const res = await axios.post(
+          "http://localhost:3000/connection/pass/" + _id,
+          {},
+          { withCredentials: true }
+        );
+        setIsChange(true);
+        console.log("res:::", res);
+      } else {
+        await axios.post(
+          "http://localhost:3000/connection/review/rejected/" + _id,
+          {},
+          { withCredentials: true }
+        );
+        setIsChange(true);
+      }
+    } catch (e) {
+      console.log("error:", e);
+    }
   };
-  const handleInterest = async () => {
-    const res = await axios.post(
-      "http://localhost:3000/connection/interested/" + _id,
-      {},
-      { withCredentials: true }
-    );
-    console.log("res:::", res);
+  const handleInterestOrAccept = async () => {
+    try {
+      if (isHomePage) {
+        console.log("handleInterest clicked:::");
+        const res = await axios.post(
+          "http://localhost:3000/connection/interested/" + _id,
+          {},
+          { withCredentials: true }
+        );
+        setIsChange(true);
+        console.log("res:::", res);
+      } else {
+        await axios.post(
+          "http://localhost:3000/connection/review/accepted/" + _id,
+          {},
+          { withCredentials: true }
+        );
+        setIsChange(true);
+      }
+    } catch (e) {
+      console.log("errror at Interest connction:", e);
+    }
   };
+  console.log("user:::", user?.fromUserId);
 
   return (
     <div>
@@ -34,13 +67,19 @@ const FeedCard = ({ user }) => {
             {gender} {age}
           </p>
           <p>{skills.join(",")}</p>
-          {location.pathname === "/" && (
+          {!isConnectionPage && (
             <div>
-              <button className="btn btn-error mx-2 " onClick={handleIgnore}>
-                Ignore
+              <button
+                className="btn btn-error mx-2 "
+                onClick={handleIgnoreOrReject}
+              >
+                {isHomePage ? "Ignore" : "Reject"}
               </button>
-              <button className="btn btn-success " onClick={handleInterest}>
-                Interest
+              <button
+                className="btn btn-success "
+                onClick={handleInterestOrAccept}
+              >
+                {isHomePage ? "Interest" : "Accept"}
               </button>
             </div>
           )}

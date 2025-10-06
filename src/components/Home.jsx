@@ -1,33 +1,30 @@
 /* eslint-disable no-debugger */
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setUser } from "../utils/userSlice";
 import { setFeed } from "../utils/feedSlice";
 import { useNavigate } from "react-router-dom";
 import FeedCard from "./FeedCard";
+import { baseURL } from "../utils/constants";
 
 const Home = () => {
-  const user = useSelector((store) => store.user);
+  // const user = useSelector((store) => store.user);
   const feedData = useSelector((store) => store.feed.feed);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isChange, setIsChange] = useState(false);
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchFeed = async () => {
       try {
-        const userData = await axios.get("http://localhost:3000/user", {
-          withCredentials: true,
-        });
-        const feedData = await axios.get("http://localhost:3000/feed", {
+        const feedData = await axios.get(baseURL + "/feed", {
           withCredentials: true,
         });
         console.log({ feedData });
 
-        console.log("userdata::", userData?.data);
-
         dispatch(setFeed(feedData?.data?.data));
-        dispatch(setUser(userData?.data));
+        setIsChange(false);
       } catch (error) {
         if (error.response && error.response.status === 401) {
           // User is not authenticated, redirect to login
@@ -36,13 +33,15 @@ const Home = () => {
         console.log("Error fetching user data:", error);
       }
     };
-    fetchUser();
-  }, []);
+    fetchFeed();
+  }, [isChange]);
 
   return (
-    <div className="flex  justify-center items-center">
+    <div className="flex flex-row justify-center items-center flex-wrap">
       {feedData &&
-        feedData.map((user) => <FeedCard user={user} key={user._id} />)}
+        feedData.map((user) => (
+          <FeedCard user={user} setIsChange={setIsChange} key={user._id} />
+        ))}
     </div>
   );
 };

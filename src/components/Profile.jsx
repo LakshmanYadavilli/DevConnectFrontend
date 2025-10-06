@@ -5,6 +5,7 @@ import { useSnackbar } from "notistack";
 
 const Profile = () => {
   const user = useSelector((store) => store.user?.user);
+  console.log("user data::::", user);
   const [isEditing, setIsEditing] = useState(false);
   const formDataInitialVal = {
     firstName: user?.firstName || "",
@@ -38,8 +39,9 @@ const Profile = () => {
       );
       enqueueSnackbar("Profile updated successfully", { variant: "success" });
       console.log("res:::", res);
+    } else {
+      enqueueSnackbar("No changes made to update", { variant: "info" });
     }
-    enqueueSnackbar("No changes made to update", { variant: "info" });
     setIsEditing(false);
     console.log("changedInputValues:::", changedInputValues);
   };
