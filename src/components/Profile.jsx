@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { baseURL } from "../utils/constants";
 
 const Profile = () => {
   const user = useSelector((store) => store.user?.user);
@@ -32,11 +33,9 @@ const Profile = () => {
       }
     });
     if (Object.keys(changedInputValues).length !== 0) {
-      const res = await axios.patch(
-        "http://localhost:3000/user/",
-        changedInputValues,
-        { withCredentials: true }
-      );
+      const res = await axios.patch(baseURL + "/user/", changedInputValues, {
+        withCredentials: true,
+      });
       enqueueSnackbar("Profile updated successfully", { variant: "success" });
       console.log("res:::", res);
     } else {

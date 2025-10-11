@@ -3,6 +3,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../utils/userSlice";
 import { clearFeed } from "../utils/feedSlice";
+import { baseURL } from "../utils/constants";
 
 const Navbar = () => {
   const user = useSelector((store) => store.user?.user);
@@ -10,7 +11,7 @@ const Navbar = () => {
   console.log("user from navbar", user);
   const handleLogout = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/auth/logout");
+      const res = await axios.post(baseURL + "/auth/logout");
       dispatch(clearUser());
       dispatch(clearFeed());
 

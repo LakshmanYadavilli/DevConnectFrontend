@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { baseURL } from "../utils/constants";
 import axios from "axios";
 import FeedCard from "./FeedCard";
 
@@ -8,7 +9,7 @@ const Requests = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       console.log("fetchRequest called:::");
-      const res = await axios.get("http://localhost:3000/connection/requests", {
+      const res = await axios.get(baseURL + "/connection/requests", {
         withCredentials: true,
       });
       console.log("requests:::", res);

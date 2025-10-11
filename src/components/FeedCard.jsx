@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { baseURL } from "../utils/constants";
 
 const FeedCard = ({ user, setIsChange }) => {
   const { firstName, lastName, age, gender, about, skills, _id } =
@@ -12,7 +13,7 @@ const FeedCard = ({ user, setIsChange }) => {
     try {
       if (isHomePage) {
         const res = await axios.post(
-          "http://localhost:3000/connection/pass/" + _id,
+          baseURL + "/connection/pass/" + _id,
           {},
           { withCredentials: true }
         );
@@ -20,7 +21,7 @@ const FeedCard = ({ user, setIsChange }) => {
         console.log("res:::", res);
       } else {
         await axios.post(
-          "http://localhost:3000/connection/review/rejected/" + _id,
+          baseURL + "/connection/review/rejected/" + _id,
           {},
           { withCredentials: true }
         );
@@ -35,7 +36,7 @@ const FeedCard = ({ user, setIsChange }) => {
       if (isHomePage) {
         console.log("handleInterest clicked:::");
         const res = await axios.post(
-          "http://localhost:3000/connection/interested/" + _id,
+          baseURL + "/connection/interested/" + _id,
           {},
           { withCredentials: true }
         );
@@ -43,7 +44,7 @@ const FeedCard = ({ user, setIsChange }) => {
         console.log("res:::", res);
       } else {
         await axios.post(
-          "http://localhost:3000/connection/review/accepted/" + _id,
+          baseURL + "/connection/review/accepted/" + _id,
           {},
           { withCredentials: true }
         );
